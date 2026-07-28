@@ -23,8 +23,8 @@ param instances = [
 ]
 
 param hostConfig = {
-  sku: 'Standard_B4als_v2'
-  diskSize: 40
+  sku: 'Standard_D2as_v5'
+  diskSize: 64
   image: {
     publisher: 'canonical'
     offer: 'ubuntu-24_04-lts'
@@ -39,6 +39,6 @@ param hostConfig = {
   ]
   admin: {
     userName: const.appName
-    publicKey: loadTextContent('../ssh/ssh-dev.pub')
+    publicKey: loadTextContent('../ssh/k8s-playground.pub')
   }
 }
