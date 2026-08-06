@@ -19,6 +19,7 @@ param instances = [
   {
     name: 'worker-01'
     privateIp: '10.1.0.6'
+    usePublicIp: true
   }
 ]
 
