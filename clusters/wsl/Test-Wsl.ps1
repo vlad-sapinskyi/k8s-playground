@@ -7,7 +7,7 @@ param(
     [string] $Action,
 
     [ValidateNotNullOrEmpty()]
-    [string] $Distro = 'Ubuntu'
+    [string] $Distro = 'Ubuntu-24.04'
 )
 
 $ErrorActionPreference = 'Stop'
