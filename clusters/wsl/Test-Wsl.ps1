@@ -7,7 +7,7 @@ param(
     [string] $Action,
 
     [ValidateNotNullOrEmpty()]
-    [string] $Distro = 'Ubuntu'
+    [string] $Distro = 'Ubuntu-24.04'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -25,9 +25,17 @@ if ($wslInstalled) {
 
 switch ($Action) {
     'Install' {
-        if ((-not $wslInstalled) -or (-not $registeredDistros)) {
+        if ((-not $wslInstalled) -or (-not $distroInstalled)) {
             Write-Host "Installing..."
-            wsl --install -d $Distro
+            wsl --install -d $Distro --no-launch
+
+            Write-Host "Configuring shared mount propagation..."
+            $wslConfTemplate = Join-Path $PSScriptRoot 'wsl.conf'
+            Get-Content -Raw $wslConfTemplate | wsl -d $Distro -u root -- bash -c "cat > /etc/wsl.conf"
+ 
+            Write-Host "Restarting distro to apply..."
+            wsl --terminate $Distro
+            wsl -d $Distro -- true
             exit 0
         }
     }
