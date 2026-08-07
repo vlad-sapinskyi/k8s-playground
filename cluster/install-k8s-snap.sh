@@ -1,5 +1,37 @@
 #!/usr/bin/env bash
+#
+# Install and configure Canonical's k8s snap on this machine, either as a control-plane (cp) node or
+# as a worker joining an existing cluster.
+#
+# Usage:
+#   install-k8s-snap.sh [cp|worker] [worker-name|join-token]
+#
+#   install-k8s-snap.sh                         Install as control-plane (default)
+#   install-k8s-snap.sh cp                      Same as above, explicit
+#   install-k8s-snap.sh cp my-node              Also print a join token for a worker named "my-node"
+#   install-k8s-snap.sh worker <join-token>     Join an existing cluster as a worker
+#
 set -euo pipefail
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+    tail -n +2 "$0" | grep '^#' | sed 's/^#//; s/^ //'
+    exit 0
+fi
+
+ROLE="${1:-cp}"
+EXTRA="${2:-}"
+
+if [[ "$ROLE" != "cp" && "$ROLE" != "worker" ]]; then
+    echo "Usage: $0 [cp|worker] [join-token]" >&2
+    echo "  role defaults to 'cp' if omitted." >&2
+    exit 1
+fi
+ 
+if [[ "$ROLE" == "worker" && -z "$EXTRA" ]]; then
+    echo "Error: worker role requires a join token." >&2
+    echo "Usage: $0 worker <join-token>" >&2
+    exit 1
+fi
 
 echo "Requesting sudo access..."
 sudo -v
@@ -21,34 +53,64 @@ else
     sudo snap install k8s --classic --channel=1.35-classic/stable
 fi
 
-echo "=== Step 2: Bootstrap cluster ==="
-if sudo k8s status &>/dev/null; then
-    echo "Cluster already bootstrapped (status below)."
+if [[ "$ROLE" == "worker" ]]; then
+
+    JOIN_TOKEN="$EXTRA"
+
+    echo "=== Step 2: Join cluster as worker ==="
+    if sudo k8s status &>/dev/null; then
+        echo "Node already part of a cluster."
+    else
+        sudo k8s join-cluster "$JOIN_TOKEN"
+    fi
+ 
+    echo "=== Step 3: Final cluster status ==="
+    sudo k8s status
+
 else
-    sudo k8s bootstrap
-fi
 
-echo "=== Step 3: Wait for cluster ready ==="
-sudo k8s status --wait-ready > /dev/null
-echo "Cluster is ready."
+    WORKER_NAME="$EXTRA"
 
-echo "=== Step 4: Enable ingress ==="
-if sudo k8s status | grep -q "ingress:.*enabled"; then
-    echo "Ingress already enabled."
-else
-    sudo k8s enable ingress
-fi
+    echo "=== Step 2: Bootstrap cluster ==="
+    if sudo k8s status &>/dev/null; then
+        echo "Cluster already bootstrapped (status below)."
+    else
+        sudo k8s bootstrap
+    fi
 
-echo "=== Step 5: Setup kubectl alias ==="
-if ! grep -q "alias k=" ~/.bash_aliases 2>/dev/null; then
-    cat >> ~/.bash_aliases << 'EOF'
+    echo "=== Step 3: Wait for cluster ready ==="
+    sudo k8s status --wait-ready > /dev/null
+    echo "Cluster is ready."
+
+    echo "=== Step 4: Enable ingress ==="
+    if sudo k8s status | grep -q "ingress:.*enabled"; then
+        echo "Ingress already enabled."
+    else
+        sudo k8s enable ingress
+    fi
+
+    echo "=== Step 5: Setup kubectl alias ==="
+    mkdir -p ~/.kube
+    sudo k8s kubectl completion bash > ~/.kube/k8s-completion.bash
+    if ! grep -q "alias k=" ~/.bash_aliases 2>/dev/null; then
+        cat >> ~/.bash_aliases << 'EOF'
 alias k='sudo k8s kubectl'
+[ -f ~/.kube/k8s-completion.bash ] && source ~/.kube/k8s-completion.bash
+complete -o default -F __start_kubectl k
 EOF
-fi
-echo "Alias 'k' configured."
+    fi
+    echo "Alias 'k' and autocompletion configured."
 
-echo "=== Step 6: Final cluster status ==="
-sleep 5
-sudo k8s status
+    sleep 5
+
+    echo "=== Step 6: Final cluster status ==="
+    sudo k8s status
+
+    if [[ -n "$WORKER_NAME" ]]; then
+        echo "=== Step 7: Generate join token for worker '$WORKER_NAME' ==="
+        sudo k8s get-join-token "$WORKER_NAME" --worker
+    fi
+
+fi
 
 exec bash
