@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Ensure shared mount propagation (WSL2 Cilium fix)
-sudo mount --make-rshared /
-
 echo "=== Step 1: k8s snap ==="
 if snap list k8s &> /dev/null; then
     echo "k8s snap already installed."
