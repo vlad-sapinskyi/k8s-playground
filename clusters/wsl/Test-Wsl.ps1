@@ -25,7 +25,7 @@ if ($wslInstalled) {
 
 switch ($Action) {
     'Install' {
-        if ((-not $wslInstalled) -or (-not $registeredDistros)) {
+        if ((-not $wslInstalled) -or (-not $distroInstalled)) {
             Write-Host "Installing..."
             wsl --install -d $Distro
             exit 0
