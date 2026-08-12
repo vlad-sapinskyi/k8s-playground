@@ -7,5 +7,5 @@ public enum Colour
     Green = 2,
     Blue = 3,
     Purple = 4,
-    Gray = 5
+    Grey = 5
 }

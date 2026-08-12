@@ -1,4 +1,7 @@
-﻿namespace Todo.Domain.Entities;
+﻿using Todo.Domain.Common;
+using Todo.Domain.Enums;
+
+namespace Todo.Domain.Entities;
 
 public class TodoItem : BaseAuditableEntity
 {
@@ -6,6 +9,6 @@ public class TodoItem : BaseAuditableEntity
     public string? Title { get; set; }
     public string? Note { get; set; }
     public PriorityLevel Priority { get; set; }
-    public bool IsDone { get; set; }
+    public bool Done { get; set; }
     public TodoList List { get; set; } = null!;
 }

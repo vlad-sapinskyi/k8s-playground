@@ -1,4 +1,7 @@
-﻿namespace Todo.Domain.Entities;
+﻿using Todo.Domain.Common;
+using Todo.Domain.Enums;
+
+namespace Todo.Domain.Entities;
 
 public class TodoList : BaseAuditableEntity
 {
