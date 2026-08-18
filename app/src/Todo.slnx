@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
   <Project Path="Todo.Api/Todo.Api.csproj" />
   <Project Path="Todo.Application/Todo.Application.csproj" Id="08752d6a-4879-4f95-a6d9-a1e6f23130d9" />
   <Project Path="Todo.Domain/Todo.Domain.csproj" Id="8d5f89a6-8297-4c2e-95c1-30e90dab74dc" />

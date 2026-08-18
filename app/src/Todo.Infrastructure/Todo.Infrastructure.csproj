@@ -1,21 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net10.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
 		<RootNamespace>Todo.Infrastructure</RootNamespace>
 		<AssemblyName>Todo.Infrastructure</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.11" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore"/>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
+		<PackageReference Include="Microsoft.Extensions.Hosting"/>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Todo.Application\Todo.Application.csproj" />
+		<ProjectReference Include="..\Todo.Application\Todo.Application.csproj" />
 	</ItemGroup>
 
 </Project>
