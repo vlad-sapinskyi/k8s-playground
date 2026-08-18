@@ -2,6 +2,7 @@
   <Folder Name="/Solution Items/">
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
+    <File Path="globals.json" />
   </Folder>
   <Project Path="Todo.Api/Todo.Api.csproj" />
   <Project Path="Todo.Application/Todo.Application.csproj" Id="08752d6a-4879-4f95-a6d9-a1e6f23130d9" />
