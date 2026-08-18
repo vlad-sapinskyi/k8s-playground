@@ -17,7 +17,7 @@ public class CreateTodoListCommandHandler(IApplicationDbContext context) : IRequ
 {
     public async Task<int> Handle(CreateTodoListCommand request, CancellationToken cancellationToken)
     {
-        var entity = new TodoList
+        var entity = new TodoListEntity
         {
             Title = request.Title,
             Colour = request.Colour ?? Colour.Grey

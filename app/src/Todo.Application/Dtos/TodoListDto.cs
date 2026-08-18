@@ -14,6 +14,6 @@ public class TodoListDto
 
     private class Mapping : Profile
     {
-        public Mapping() => CreateMap<TodoList, TodoListDto>();
+        public Mapping() => CreateMap<TodoListEntity, TodoListDto>();
     }
 }

@@ -3,12 +3,12 @@ using Todo.Domain.Enums;
 
 namespace Todo.Domain.Entities;
 
-public class TodoItem : BaseAuditableEntity
+public class TodoItemEntity : BaseEntity
 {
     public int ListId { get; set; }
     public string? Title { get; set; }
     public string? Note { get; set; }
     public PriorityLevel Priority { get; set; }
     public bool Done { get; set; }
-    public TodoList List { get; set; } = null!;
+    public TodoListEntity List { get; set; } = null!;
 }

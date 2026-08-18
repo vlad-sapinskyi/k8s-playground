@@ -4,9 +4,9 @@ using Todo.Domain.Entities;
 
 namespace Todo.Infrastructure.Data.Configurations;
 
-public class TodoListConfiguration : IEntityTypeConfiguration<TodoList>
+public class TodoListConfiguration : IEntityTypeConfiguration<TodoListEntity>
 {
-    public void Configure(EntityTypeBuilder<TodoList> builder)
+    public void Configure(EntityTypeBuilder<TodoListEntity> builder)
     {
         builder.Property(t => t.Title)
             .HasMaxLength(200)

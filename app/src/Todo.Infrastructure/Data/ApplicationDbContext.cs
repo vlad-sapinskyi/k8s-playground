@@ -6,7 +6,6 @@ namespace Todo.Infrastructure.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options), IApplicationDbContext
 {
-    public DbSet<TodoList> TodoLists => Set<TodoList>();
-
-    public DbSet<TodoItem> TodoItems => Set<TodoItem>();
+    public DbSet<TodoListEntity> TodoLists => Set<TodoListEntity>();
+    public DbSet<TodoItemEntity> TodoItems => Set<TodoItemEntity>();
 }

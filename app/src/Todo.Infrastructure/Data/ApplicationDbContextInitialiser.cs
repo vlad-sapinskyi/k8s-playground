@@ -26,16 +26,16 @@ public class ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitial
         {
             if (!context.TodoLists.Any())
             {
-                context.TodoLists.Add(new TodoList
+                context.TodoLists.Add(new TodoListEntity
                 {
                     Title = "Tasks",
                     Colour = Colour.Green,
                     Items =
                     {
-                        new TodoItem { Title = "Make a todo list 📃" },
-                        new TodoItem { Title = "Check off the first item ✅" },
-                        new TodoItem { Title = "Realise you've already done two things on the list! 🤯"},
-                        new TodoItem { Title = "Reward yourself with a nice, long nap 🏆" },
+                        new TodoItemEntity { Title = "Make a todo list 📃" },
+                        new TodoItemEntity { Title = "Check off the first item ✅" },
+                        new TodoItemEntity { Title = "Realise you've already done two things on the list! 🤯"},
+                        new TodoItemEntity { Title = "Reward yourself with a nice, long nap 🏆" },
                     }
                 });
 

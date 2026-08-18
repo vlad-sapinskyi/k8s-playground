@@ -14,7 +14,7 @@ public class TodoItemDto
 
     private class Mapping : Profile
     {
-        public Mapping() => CreateMap<TodoItem, TodoItemDto>()
+        public Mapping() => CreateMap<TodoItemEntity, TodoItemDto>()
             .ForMember(d => d.Priority, opt => opt.MapFrom(s => (int)s.Priority));
     }
 }

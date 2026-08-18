@@ -3,9 +3,9 @@ using Todo.Domain.Enums;
 
 namespace Todo.Domain.Entities;
 
-public class TodoList : BaseAuditableEntity
+public class TodoListEntity : BaseEntity
 {
     public string? Title { get; set; }
     public Colour Colour { get; set; }
-    public IList<TodoItem> Items { get; private set; } = [];
+    public IList<TodoItemEntity> Items { get; private set; } = [];
 }

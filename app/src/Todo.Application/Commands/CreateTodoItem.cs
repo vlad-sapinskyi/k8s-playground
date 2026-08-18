@@ -15,7 +15,7 @@ public class CreateTodoItemCommandHandler(IApplicationDbContext context) : IRequ
 {
     public async Task<int> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
     {
-        var entity = new TodoItem
+        var entity = new TodoItemEntity
         {
             ListId = request.ListId,
             Title = request.Title,

@@ -5,7 +5,7 @@ namespace Todo.Application.Common;
 
 public interface IApplicationDbContext
 {
-    DbSet<TodoList> TodoLists { get; }
-    DbSet<TodoItem> TodoItems { get; }
+    DbSet<TodoListEntity> TodoLists { get; }
+    DbSet<TodoItemEntity> TodoItems { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
