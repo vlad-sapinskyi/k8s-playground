@@ -23,7 +23,7 @@ namespace Todo.Api.Endpoints
         {
             var id = await sender.Send(command);
 
-            return TypedResults.Created($"/{nameof(TodoItemEndpointGroup)}/{id}", id);
+            return TypedResults.Created($"{RoutePrefix}/{id}", id);
         }
 
         [EndpointSummary("Update a Todo Item")]

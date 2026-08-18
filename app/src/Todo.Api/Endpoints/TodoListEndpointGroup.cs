@@ -13,7 +13,7 @@ namespace Todo.Api.Endpoints
 
         public static void Map(RouteGroupBuilder groupBuilder)
         {
-            //groupBuilder.RequireAuthorization();
+            groupBuilder.RequireAuthorization();
             groupBuilder.MapGet(GetTodoLists);
             groupBuilder.MapPost(CreateTodoList);
             groupBuilder.MapPut(UpdateTodoList, "{id}");
@@ -35,7 +35,7 @@ namespace Todo.Api.Endpoints
         {
             var id = await sender.Send(command);
 
-            return TypedResults.Created($"/{nameof(TodoListEndpointGroup)}/{id}", id);
+            return TypedResults.Created($"{RoutePrefix}/{id}", id);
         }
 
         [EndpointSummary("Update a Todo List")]

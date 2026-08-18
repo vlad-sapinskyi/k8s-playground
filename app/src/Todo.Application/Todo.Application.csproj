@@ -22,8 +22,4 @@
     <ProjectReference Include="..\Todo.Domain\Todo.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Behaviours\" />
-  </ItemGroup>
-
 </Project>
