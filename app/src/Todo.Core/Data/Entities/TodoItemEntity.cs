@@ -2,7 +2,7 @@
 
 namespace Todo.Core.Data.Entities;
 
-public class TodoItemEntity : BaseEntity
+public class TodoItemEntity : BaseAuditableEntity
 {
     public int ListId { get; set; }
 

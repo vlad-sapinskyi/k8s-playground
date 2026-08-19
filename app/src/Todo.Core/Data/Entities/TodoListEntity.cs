@@ -2,7 +2,7 @@
 
 namespace Todo.Core.Data.Entities;
 
-public class TodoListEntity : BaseEntity
+public class TodoListEntity : BaseAuditableEntity
 {
     public string Title { get; set; } = string.Empty;
 

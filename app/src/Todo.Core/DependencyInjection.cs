@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 using Todo.Core.Data;
+using Todo.Core.Data.Interceptors;
 using Todo.Core.Identity;
 using Todo.Core.Services;
 
@@ -28,9 +29,14 @@ public static class DependencyInjection
     {
         var connectionString = builder.Configuration.GetConnectionString("TodoDb");
 
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddSingleton(TimeProvider.System);
+        builder.Services.AddScoped<AuditableEntityInterceptor>();
+
         builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
             options.UseSqlite(connectionString);
+            options.AddInterceptors(sp.GetRequiredService<AuditableEntityInterceptor>());
         });
 
         builder.Services.AddScoped<IApplicationDbContext>(provider =>
