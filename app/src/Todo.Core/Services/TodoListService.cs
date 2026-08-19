@@ -44,7 +44,9 @@ public class TodoListService(
         var entity = new TodoListEntity
         {
             Title = list.Title.Trim(),
-            Colour = Enum.Parse<Colour>(list.Colour)
+            Colour = string.IsNullOrEmpty(list.Colour) 
+                ? Colour.Grey 
+                : Enum.Parse<Colour>(list.Colour)
         };
 
         context.TodoLists.Add(entity);
@@ -72,7 +74,10 @@ public class TodoListService(
         }
 
         entity.Title = list.Title.Trim();
-        entity.Colour = Enum.Parse<Colour>(list.Colour);
+        if (!string.IsNullOrEmpty(list.Colour))
+        {
+            entity.Colour = Enum.Parse<Colour>(list.Colour);
+        }
         await context.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation("Updated TodoList {ListId}", id);

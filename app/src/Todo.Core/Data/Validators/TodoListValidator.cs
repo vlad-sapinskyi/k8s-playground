@@ -13,8 +13,7 @@ public class TodoListValidator : AbstractValidator<TodoListDto>
             .MaximumLength(200);
 
         RuleFor(x => x.Colour)
-            .NotEmpty()
-            .Must(c => Enum.TryParse<Colour>(c, out _))
+            .Must(c => string.IsNullOrEmpty(c) || Enum.TryParse<Colour>(c, out _))
             .WithMessage("Invalid 'Colour' value.");
     }
 }
