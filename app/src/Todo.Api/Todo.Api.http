@@ -43,7 +43,8 @@ Authorization: Bearer {{login.response.body.$.accessToken}}
 Content-Type: application/json
 
 {
-  "Title": "Backlog"
+  "Title": "Backlog",
+  "Colour": "Green"
 }
 
 ###
