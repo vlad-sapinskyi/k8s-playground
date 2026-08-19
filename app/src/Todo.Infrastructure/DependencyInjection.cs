@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Todo.Application.Common;
 using Todo.Infrastructure.Data;
+using Todo.Infrastructure.Identity;
+
 
 namespace Todo.Infrastructure;
 
@@ -22,5 +25,18 @@ public static class DependencyInjection
             provider.GetRequiredService<ApplicationDbContext>());
 
         builder.Services.AddScoped<ApplicationDbContextInitialiser>();
+
+        builder.Services.AddAuthentication()
+            .AddBearerToken(IdentityConstants.BearerScheme);
+
+        builder.Services.AddAuthorizationBuilder();
+
+        builder.Services
+            .AddIdentityCore<ApplicationUser>()
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddApiEndpoints();
+
+        builder.Services.AddTransient<IIdentityService, IdentityService>();
     }
 }

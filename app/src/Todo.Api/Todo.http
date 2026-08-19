@@ -1,16 +1,41 @@
 ﻿@Web_HostAddress = https://localhost:7135
-@BearerToken = qwerty
+@Email=admin@localhost
+@Password=Administrator1!
+
+# POST Register
+POST {{Web_HostAddress}}/register
+Content-Type: application/json
+
+{
+  "email": "{{Email}}",
+  "password": "{{Password}}"
+}
+
+###
+
+# POST Login
+# @name login
+POST {{Web_HostAddress}}/login
+Content-Type: application/json
+
+{
+  "email": "{{Email}}",
+  "password": "{{Password}}"
+}
+
+###
 
 # GET TodoLists
 GET {{Web_HostAddress}}/api/todo/lists
-Authorization: Bearer {{BearerToken}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
 
 ###
 
 # POST TodoLists
 POST {{Web_HostAddress}}/api/todo/lists
-Authorization: Bearer {{BearerToken}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
 Content-Type: application/json
+
 {
   "Title": "Backlog"
 }
@@ -19,8 +44,9 @@ Content-Type: application/json
 
 # PUT TodoLists
 PUT {{Web_HostAddress}}/api/todo/lists/1
-Authorization: Bearer {{BearerToken}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
 Content-Type: application/json
+
 {
   "Id": 1,
   "Title": "Product Backlog"
@@ -30,14 +56,15 @@ Content-Type: application/json
 
 # DELETE TodoLists
 DELETE {{Web_HostAddress}}/api/todo/lists/1
-Authorization: Bearer {{BearerToken}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
 
 ###
 
 # POST TodoItems
 POST {{Web_HostAddress}}/api/todo/items
-Authorization: Bearer {{BearerToken}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
 Content-Type: application/json
+
 {
   "ListId": 1,
   "Title": "Eat a burrito 🌯"
@@ -47,8 +74,9 @@ Content-Type: application/json
 
 # PUT TodoItems
 PUT {{Web_HostAddress}}/api/todo/items/1
-Authorization: Bearer {{BearerToken}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
 Content-Type: application/json
+
 {
   "Id": 1,
   "Title": "Eat a yummy burrito 🌯",
@@ -59,6 +87,6 @@ Content-Type: application/json
 
 # DELETE TodoItem
 DELETE {{Web_HostAddress}}/api/todo/items/1
-Authorization: Bearer {{BearerToken}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
 
 ###

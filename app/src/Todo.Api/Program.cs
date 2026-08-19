@@ -4,6 +4,7 @@ using Todo.Api.Common;
 using Todo.Application;
 using Todo.Infrastructure;
 using Todo.Infrastructure.Data;
+using Todo.Infrastructure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,8 @@ app.UseFileServer();
 app.MapOpenApi();
 
 app.UseExceptionHandler(options => { });
+
+app.MapIdentityApi<ApplicationUser>();
 
 app.MapEndpoints(typeof(Program).Assembly);
 

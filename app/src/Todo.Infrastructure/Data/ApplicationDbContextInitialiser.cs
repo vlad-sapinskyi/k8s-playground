@@ -1,10 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Todo.Domain.Entities;
 using Todo.Domain.Enums;
+using Todo.Infrastructure.Identity;
 
 namespace Todo.Infrastructure.Data;
 
-public class ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, ApplicationDbContext context)
+public class ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, 
+    ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
 {
     public async Task InitialiseAsync()
     {
@@ -24,6 +27,26 @@ public class ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitial
     {
         try
         {
+            // Default roles
+            var adminRole = new IdentityRole(nameof(Roles.Admin));
+            if (roleManager.Roles.All(r => r.Name != adminRole.Name))
+                await roleManager.CreateAsync(adminRole);
+
+            // Default users
+            var adminUser = new ApplicationUser
+            {
+                UserName = "admin",
+                Email = "admin@localhost"
+            };
+
+            if (userManager.Users.All(u => u.UserName != adminUser.UserName))
+            {
+                await userManager.CreateAsync(adminUser, "Administrator1!");
+                if (!string.IsNullOrWhiteSpace(adminRole.Name))
+                    await userManager.AddToRolesAsync(adminUser, [adminRole.Name]);
+            }
+
+            // Default data
             if (!context.TodoLists.Any())
             {
                 context.TodoLists.Add(new TodoListEntity
@@ -38,7 +61,6 @@ public class ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitial
                         new TodoItemEntity { Title = "Reward yourself with a nice, long nap 🏆" },
                     }
                 });
-
                 await context.SaveChangesAsync();
             }
         }
