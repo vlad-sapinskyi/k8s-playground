@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using System.Reflection;
 using Todo.Application.Data;
 using Todo.Application.Identity;
+using Todo.Application.Services;
 
 namespace Todo.Application;
 
@@ -18,6 +19,9 @@ public static class DependencyInjection
         builder.AddIdentityServices();
         builder.AddMappingServices();
         builder.AddValidationServices();
+
+        builder.Services.AddScoped<ITodoListService, TodoListService>();
+        builder.Services.AddScoped<ITodoItemService, TodoItemService>();
     }
 
     private static void AddDatabaseServices(this IHostApplicationBuilder builder)

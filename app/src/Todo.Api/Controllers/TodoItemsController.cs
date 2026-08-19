@@ -3,69 +3,47 @@ using Todo.Application.Data;
 using Todo.Application.Data.Dtos;
 using Todo.Application.Data.Entities;
 using Todo.Application.Data.Enums;
+using Todo.Application.Services;
 
 [Route("api/todo/items")]
 [ApiController]
-public class TodoItemsController(IApplicationDbContext context) : ControllerBase
+public class TodoItemsController(ITodoItemService service) : ControllerBase
 {
     // GET: api/todo/items/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult<TodoItemDto>> GetTodoItem(int id, CancellationToken cancellationToken)
     {
-        var entity = await context.TodoItems.FindAsync([id], cancellationToken);
+        var dto = await service.GetByIdAsync(id, cancellationToken);
 
-        return entity is null 
-            ? NotFound() 
-            : Ok(entity);
+        return dto is null ? NotFound() : Ok(dto);
     }
 
     // POST: api/todo/items/
     [HttpPost]
-    public async Task<ActionResult<TodoItemDto>> CreateTodoItem(TodoItemDto item, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateTodoItem(TodoItemDto item, CancellationToken cancellationToken)
     {
-        var entity = new TodoItemEntity
-        {
-            ListId = item.ListId,
-            Title = item.Title,
-            Done = false
-        };
+        var result = await service.CreateAsync(item, cancellationToken);
 
-        context.TodoItems.Add(entity);
-        await context.SaveChangesAsync(cancellationToken);
-
-        return CreatedAtAction(nameof(GetTodoItem), new { id = entity.Id }, entity);
+        return result.Succeeded
+            ? CreatedAtAction(nameof(GetTodoItem), new { id = result.Value!.Id }, result.Value)
+            : BadRequest(result.Errors);
     }
 
     // PUT: api/todo/items/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTodoItem(int id, TodoItemDto item, CancellationToken cancellationToken)
     {
-        var entity = await context.TodoItems.FindAsync([id], cancellationToken);
+        var result = await service.UpdateAsync(id, item, cancellationToken);
 
-        if (entity is null) 
-            return NotFound();
-
-        entity.Title = item.Title;
-        entity.Done = item.Done;
-        entity.Priority = (PriorityLevel)item.Priority;
-        entity.Note = item.Note;
-        await context.SaveChangesAsync(cancellationToken);
-
-        return NoContent();
+        return result.Succeeded ? NoContent() : NotFound(result.Errors);
     }
 
     // DELETE: api/todo/items/{id}
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTodoItem(int id, CancellationToken cancellationToken)
     {
-        var entity = await context.TodoItems.FindAsync([id], cancellationToken);
+        var result = await service.DeleteAsync(id, cancellationToken);
 
-        if (entity is null) 
-            return NotFound();
-
-        context.TodoItems.Remove(entity);
-        await context.SaveChangesAsync(cancellationToken);
-
-        return NoContent();
+        return result.Succeeded ? NoContent() : NotFound(result.Errors);
     }
 }
