@@ -12,4 +12,8 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Todo.Application\Todo.Application.csproj" />
+	</ItemGroup>
+
 </Project>
