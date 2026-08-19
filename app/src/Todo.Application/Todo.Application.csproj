@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>Todo.Application</RootNamespace>
+		<AssemblyName>Todo.Application</AssemblyName>
+	</PropertyGroup>
+
+</Project>
