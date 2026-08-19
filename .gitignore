@@ -48,3 +48,9 @@ bld/
 ## Publish
 **/Properties/PublishProfiles/*.pubxml.user
 publish/
+
+## SQLite databases
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
