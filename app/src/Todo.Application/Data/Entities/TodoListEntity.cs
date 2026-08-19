@@ -4,7 +4,9 @@ namespace Todo.Application.Data.Entities;
 
 public class TodoListEntity : BaseEntity
 {
-    public string? Title { get; set; }
+    public string Title { get; set; } = string.Empty;
+
     public Colour Colour { get; set; } = Colour.Grey;
-    public IList<TodoItemEntity> Items { get; private set; } = [];
+
+    public ICollection<TodoItemEntity> Items { get; private set; } = [];
 }
