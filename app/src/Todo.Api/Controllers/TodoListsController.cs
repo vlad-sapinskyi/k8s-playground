@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Todo.Application.Data.Dtos;
-using Todo.Application.Services;
+using Todo.Core.Data.Dtos;
+using Todo.Core.Services;
+
+namespace Todo.Api.Controllers;
 
 [Route("api/todo/lists")]
 [ApiController]

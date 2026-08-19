@@ -1,6 +1,6 @@
-using Todo.Application;
-using Todo.Application.Data;
-using Todo.Application.Identity;
+using Todo.Core;
+using Todo.Core.Data;
+using Todo.Core.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

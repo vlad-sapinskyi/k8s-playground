@@ -7,13 +7,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Todo.Application\Todo.Application.csproj" />
+		<ProjectReference Include="..\Todo.Core\Todo.Core.csproj" />
 	</ItemGroup>
 
 </Project>
