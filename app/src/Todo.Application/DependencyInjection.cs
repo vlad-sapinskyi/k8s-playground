@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ public static class DependencyInjection
         builder.AddDatabaseServices();
         builder.AddIdentityServices();
         builder.AddMappingServices();
+        builder.AddValidationServices();
     }
 
     private static void AddDatabaseServices(this IHostApplicationBuilder builder)
@@ -51,5 +53,10 @@ public static class DependencyInjection
     {
         builder.Services.AddAutoMapper(cfg =>
             cfg.AddMaps(Assembly.GetExecutingAssembly()));
+    }
+
+    private static void AddValidationServices(this IHostApplicationBuilder builder)
+    {
+        builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }
