@@ -1,3 +1,4 @@
+using Todo.Api.Middleware;
 using Todo.Core;
 using Todo.Core.Data;
 using Todo.Core.Identity;
@@ -5,6 +6,9 @@ using Todo.Core.Identity;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.AddApplicationServices();
 
@@ -15,6 +19,8 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
@@ -39,7 +45,6 @@ app.UseAuthorization();
 
 app.UseFileServer();
 app.MapOpenApi();
-app.UseExceptionHandler("/error");
 app.MapIdentityApi<ApplicationUser>();
 app.MapControllers();
 
