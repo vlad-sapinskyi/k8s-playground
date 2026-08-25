@@ -1,47 +1,21 @@
-name: CI
+name: CI - Bicep
 
 on:
   push:
     branches: [main]
     paths:
       - '.github/workflows/**'
-      - 'app/src/**'
       - 'cluster/azure/bicep/**'
   pull_request:
     branches: [main]
     paths:
       - '.github/workflows/**'
-      - 'app/src/**'
       - 'cluster/azure/bicep/**'
 
 env:
-  SOLUTION_DIR: app/src
   BICEP_DIR: cluster/azure/bicep
 
 jobs:
-  build-dot-net:
-    name: Build .NET application
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-
-      - name: Install .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          global-json-file: ${{ env.SOLUTION_DIR }}/global.json
-          cache: true
-          cache-dependency-path: ${{ env.SOLUTION_DIR }}/**/packages.lock.json
-
-      - name: Restore solution
-        run: dotnet restore
-        working-directory: ${{ env.SOLUTION_DIR }}
-
-      - name: Build solution
-        run: dotnet build --no-restore --configuration Release
-        working-directory: ${{ env.SOLUTION_DIR }}
-
   validate-bicep:
     name: Validate Bicep infrastructure
     runs-on: ubuntu-latest
