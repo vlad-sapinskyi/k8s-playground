@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  APP_SRC_DIR: app/src
+
+jobs:
+  build-dot-net:
+    name: Build .NET
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: ${{ env.APP_SRC_DIR }}/global.json
+
+      - name: Restore solution
+        run: dotnet restore
+        working-directory: ${{ env.APP_SRC_DIR }}
+
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
+        working-directory: ${{ env.APP_SRC_DIR }}
