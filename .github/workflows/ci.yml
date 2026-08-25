@@ -3,8 +3,14 @@ name: CI
 on:
   push:
     branches: [main]
+    paths:
+      - 'app/src/**'
+      - 'cluster/azure/bicep/**'
   pull_request:
     branches: [main]
+    paths:
+      - 'app/src/**'
+      - 'cluster/azure/bicep/**'
 
 env:
   SOLUTION_DIR: app/src
@@ -33,7 +39,7 @@ jobs:
         working-directory: ${{ env.SOLUTION_DIR }}
 
   validate-bicep:
-    name: Validate Bicep
+    name: Validate Bicep infrastructure
     runs-on: ubuntu-latest
 
     steps:
