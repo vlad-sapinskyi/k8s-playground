@@ -7,11 +7,12 @@ on:
     branches: [main]
 
 env:
-  APP_SRC_DIR: app/src
+  SOLUTION_DIR: app/src
+  BICEP_DIR: cluster/azure/bicep
 
 jobs:
   build-dot-net:
-    name: Build .NET
+    name: Build .NET application
     runs-on: ubuntu-latest
 
     steps:
@@ -21,12 +22,30 @@ jobs:
       - name: Install .NET
         uses: actions/setup-dotnet@v6
         with:
-          global-json-file: ${{ env.APP_SRC_DIR }}/global.json
+          global-json-file: ${{ env.SOLUTION_DIR }}/global.json
 
       - name: Restore solution
         run: dotnet restore
-        working-directory: ${{ env.APP_SRC_DIR }}
+        working-directory: ${{ env.SOLUTION_DIR }}
 
       - name: Build solution
         run: dotnet build --no-restore --configuration Release
-        working-directory: ${{ env.APP_SRC_DIR }}
+        working-directory: ${{ env.SOLUTION_DIR }}
+
+  validate-bicep:
+    name: Validate Bicep
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Install Bicep CLI
+        run: az bicep install
+    
+      - name: Build Bicep templates
+        run: |
+          for file in $(find "$BICEP_DIR" -name '*.bicep'); do
+            echo "Building $file"
+            az bicep build --file "$file" --stdout > /dev/null
+          done
