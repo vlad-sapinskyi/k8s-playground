@@ -1,0 +1,42 @@
+name: CI - Bicep
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - 'cluster/azure/bicep/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - 'cluster/azure/bicep/**'
+
+env:
+  BICEP_DIR: cluster/azure/bicep
+
+jobs:
+  validate-bicep:
+    name: Validate Bicep infrastructure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Install Bicep CLI
+        run: az bicep install
+
+      - name: Build Bicep templates
+        run: |
+          for file in $(find "$BICEP_DIR" -name '*.bicep'); do
+            echo "Building $file"
+            az bicep build --file "$file" --stdout > /dev/null
+          done
+
+      - name: Lint Bicep templates
+        run: |
+          for file in $(find "$BICEP_DIR" -name '*.bicep'); do
+            echo "Linting $file"
+            az bicep lint --file "$file"
+          done

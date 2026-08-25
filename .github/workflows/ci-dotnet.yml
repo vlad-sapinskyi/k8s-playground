@@ -1,0 +1,40 @@
+name: CI - .NET
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - 'app/src/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - 'app/src/**'
+
+env:
+  SOLUTION_DIR: app/src
+
+jobs:
+  build-dot-net:
+    name: Build .NET application
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: ${{ env.SOLUTION_DIR }}/global.json
+          cache: true
+          cache-dependency-path: ${{ env.SOLUTION_DIR }}/**/packages.lock.json
+
+      - name: Restore solution
+        run: dotnet restore
+        working-directory: ${{ env.SOLUTION_DIR }}
+
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
+        working-directory: ${{ env.SOLUTION_DIR }}
