@@ -1,37 +1,98 @@
-@Todo.Api_HostAddress = https://localhost:7135
+﻿@Web_HostAddress = https://localhost:7135
+@Email=admin@localhost
+@Password=Administrator1!
 
-###
-
-GET {{Todo.Api_HostAddress}}/api/todoitem
-
-###
-
-@id=0
-GET {{Todo.Api_HostAddress}}/api/todoitem/1
-
-###
-
-POST {{Todo.Api_HostAddress}}/api/todoitem
+# POST Register
+POST {{Web_HostAddress}}/register
 Content-Type: application/json
 
 {
-  "name": "walk dog",
-  "isComplete": true
+  "email": "{{Email}}",
+  "password": "{{Password}}"
 }
 
 ###
 
-PUT {{Todo.Api_HostAddress}}/api/todoitem/1
+# POST Login
+# @name login
+POST {{Web_HostAddress}}/login
 Content-Type: application/json
 
 {
-  "id": 1,
-  "name": "feed fish",
-  "isComplete": false
+  "email": "{{Email}}",
+  "password": "{{Password}}"
 }
 
 ###
 
-DELETE {{Todo.Api_HostAddress}}/api/todoitem/1
+# GET TodoLists
+GET {{Web_HostAddress}}/api/todo/lists
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+###
+
+# GET TodoList
+GET {{Web_HostAddress}}/api/todo/lists/1
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+###
+
+# POST TodoList
+POST {{Web_HostAddress}}/api/todo/lists
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "Title": "Backlog"
+}
+
+###
+
+# PUT TodoList
+PUT {{Web_HostAddress}}/api/todo/lists/1
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "Id": 1,
+  "Title": "Product Backlog"
+}
+
+###
+
+# DELETE TodoList
+DELETE {{Web_HostAddress}}/api/todo/lists/1
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+###
+
+# POST TodoItem
+POST {{Web_HostAddress}}/api/todo/items
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "ListId": 1,
+  "Title": "Eat a burrito 🌯"
+}
+
+###
+
+# PUT TodoItem
+PUT {{Web_HostAddress}}/api/todo/items/1
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "Id": 1,
+  "Title": "Eat a yummy burrito 🌯",
+  "Done": true
+}
+
+###
+
+# DELETE TodoItem
+DELETE {{Web_HostAddress}}/api/todo/items/1
+Authorization: Bearer {{login.response.body.$.accessToken}}
 
 ###
