@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+		<RootNamespace>Todo.Core.UnitTests</RootNamespace>
+		<AssemblyName>Todo.Core.UnitTests</AssemblyName>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+  </ItemGroup>
+
+</Project>
