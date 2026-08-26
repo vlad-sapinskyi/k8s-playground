@@ -1,14 +1,14 @@
 <Solution>
 	<Folder Name="/Solution Items/">
-		<File Path="Directory.Build.props"/>
-		<File Path="Directory.Packages.props"/>
-		<File Path="global.json"/>
+		<File Path="Directory.Build.props" />
+		<File Path="Directory.Packages.props" />
+		<File Path="global.json" />
 	</Folder>
 	<Folder Name="/src/">
-		<Project Path="src/Todo.Api/Todo.Api.csproj" DefaultStartup="true"/>
-		<Project Path="src/Todo.Core/Todo.Core.csproj"/>
+		<Project Path="src/Todo.Api/Todo.Api.csproj" DefaultStartup="true" />
+		<Project Path="src/Todo.Core/Todo.Core.csproj" />
 	</Folder>
 	<Folder Name="/tests/">
-		<Project Path="tests/Todo.Core.UnitTests/Todo.Core.UnitTests.csproj"/>
+		<Project Path="tests/Todo.Core.UnitTests/Todo.Core.UnitTests.csproj" />
 	</Folder>
 </Solution>
