@@ -5,15 +5,15 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/**'
-      - 'app/src/**'
+      - 'app/**'
   pull_request:
     branches: [main]
     paths:
       - '.github/workflows/**'
-      - 'app/src/**'
+      - 'app/**'
 
 env:
-  SOLUTION_DIR: app/src
+  SOLUTION_DIR: app
 
 jobs:
   build-dot-net:
@@ -29,7 +29,7 @@ jobs:
         with:
           global-json-file: ${{ env.SOLUTION_DIR }}/global.json
           cache: true
-          cache-dependency-path: ${{ env.SOLUTION_DIR }}/**/packages.lock.json
+          cache-dependency-path: ${{ env.SOLUTION_DIR }}/src/**/packages.lock.json
 
       - name: Restore solution
         run: dotnet restore
@@ -37,4 +37,8 @@ jobs:
 
       - name: Build solution
         run: dotnet build --no-restore --configuration Release
+        working-directory: ${{ env.SOLUTION_DIR }}
+      
+      - name: Run unit tests
+        run: dotnet test --no-build --configuration Release
         working-directory: ${{ env.SOLUTION_DIR }}

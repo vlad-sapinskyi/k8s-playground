@@ -36,17 +36,18 @@ public class TodoListService(
         var validation = await validator.ValidateAsync(list, cancellationToken);
         if (!validation.IsValid)
         {
+            var errorMessages = validation.Errors.Select(e => e.ErrorMessage);
             logger.LogWarning("Validation failed creating TodoList: {Errors}",
-                string.Join(", ", validation.Errors.Select(e => e.ErrorMessage)));
-            return Result<TodoListDto>.Failure(validation.Errors.Select(e => e.ErrorMessage));
+                string.Join(", ", errorMessages));
+            return Result<TodoListDto>.Failure(errorMessages);
         }
 
         var entity = new TodoListEntity
         {
             Title = list.Title.Trim(),
-            Colour = string.IsNullOrEmpty(list.Colour) 
-                ? Colour.Grey 
-                : Enum.Parse<Colour>(list.Colour)
+            Colour = Enum.TryParse<Colour>(list.Colour, out var colour) 
+                ? colour 
+                : Colour.Grey
         };
 
         context.TodoLists.Add(entity);
@@ -61,9 +62,10 @@ public class TodoListService(
         var validation = await validator.ValidateAsync(list, cancellationToken);
         if (!validation.IsValid)
         {
+            var errorMessages = validation.Errors.Select(e => e.ErrorMessage);
             logger.LogWarning("Validation failed updating TodoList {ListId}: {Errors}",
-                id, string.Join(", ", validation.Errors.Select(e => e.ErrorMessage)));
-            return Result.Failure(validation.Errors.Select(e => e.ErrorMessage));
+                id, string.Join(", ", errorMessages));
+            return Result.Failure(errorMessages);
         }
 
         var entity = await context.TodoLists.FindAsync([id], cancellationToken);
@@ -74,10 +76,9 @@ public class TodoListService(
         }
 
         entity.Title = list.Title.Trim();
-        if (!string.IsNullOrEmpty(list.Colour))
-        {
-            entity.Colour = Enum.Parse<Colour>(list.Colour);
-        }
+        entity.Colour = Enum.TryParse<Colour>(list.Colour, out var colour)
+            ? colour
+            : Colour.Grey;
         await context.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation("Updated TodoList {ListId}", id);
