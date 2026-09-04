@@ -36,9 +36,9 @@ public class TodoItemService(
         var validation = await validator.ValidateAsync(dto, cancellationToken);
         if (!validation.IsValid)
         {
-            logger.LogWarning("Validation failed creating TodoItem: {@Errors}",
-                [.. validation.Errors.Select(e => e.ErrorMessage)]);
-            return Result<TodoItemDto>.Failure(validation.Errors.Select(e => e.ErrorMessage));
+            var errorMessages = validation.Errors.Select(e => e.ErrorMessage);
+            logger.LogWarning("Validation failed creating TodoItem: {@Errors}", [.. errorMessages]);
+            return Result<TodoItemDto>.Failure(errorMessages);
         }
 
         var listExists = await context.TodoLists.AnyAsync(x => x.Id == dto.ListId, cancellationToken);
@@ -53,7 +53,9 @@ public class TodoItemService(
             ListId = dto.ListId,
             Title = dto.Title.Trim(),
             Note = dto.Note,
-            Priority = (PriorityLevel)dto.Priority,
+            Priority = Enum.IsDefined(typeof(PriorityLevel), dto.Priority)
+                ? (PriorityLevel)dto.Priority
+                : PriorityLevel.None,
             Done = false
         };
         context.TodoItems.Add(entity);
@@ -68,9 +70,10 @@ public class TodoItemService(
         var validation = await validator.ValidateAsync(dto, cancellationToken);
         if (!validation.IsValid)
         {
+            var errorMessages = validation.Errors.Select(e => e.ErrorMessage);
             logger.LogWarning("Validation failed updating TodoItem {ItemId}: {@Errors}",
-               id, validation.Errors.Select(e => e.ErrorMessage).ToArray());
-            return Result.Failure(validation.Errors.Select(e => e.ErrorMessage));
+               id, errorMessages.ToArray());
+            return Result.Failure(errorMessages);
         }
 
         var entity = await context.TodoItems.FindAsync([id], cancellationToken);
@@ -82,7 +85,9 @@ public class TodoItemService(
 
         entity.Title = dto.Title.Trim();
         entity.Note = dto.Note;
-        entity.Priority = (PriorityLevel)dto.Priority;
+        entity.Priority = Enum.IsDefined(typeof(PriorityLevel), dto.Priority)
+                ? (PriorityLevel)dto.Priority
+                : PriorityLevel.None;
         entity.Done = dto.Done;
         await context.SaveChangesAsync(cancellationToken);
 
